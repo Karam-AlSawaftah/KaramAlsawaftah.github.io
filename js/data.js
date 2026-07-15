@@ -183,6 +183,38 @@ const PROJECTS = [
     ],
   },
   {
+    id: "WebXR-Elective-Project",
+    category: "university",
+    badge: "WebXR",
+    title: "WebXR Smashing Game",
+    role: "Sole WebXR Developer",
+    summary:
+      "A WebXR game built for our elective project, where players smash virtual objects in a 3D space using their hands. The game leverages WebXR technology to provide an immersive experience directly in the browser, without the need for additional software or installations.",
+    highlights: [
+      "Developed the core WebXR functionality from the ground up",
+      "Implemented controller velocity tracking and interaction mechanics for immersive gameplay",
+      "Created a satisfying smashing experience with responsive feedback and visual effects",
+    ],
+    tech: ["WebXR", "JavaScript", "A-Frame", "Three.js"],
+    links: [],
+  },
+  {
+    id: "Electronics project",
+    category: "university",
+    badge: "Electronics / Unity",
+    title: "Bard Adventure — Arduino & Unity",
+    role: "Electronics & Unity Developer",
+    summary:
+      "A hybrid electronics and Unity project where players control a MIDI flute to play a bard character in a Rythym Duneon crawler game. The project combines physical electronics with digital gameplay, allowing players to interact with the game world through musical input.",
+    highlights: [
+      "Designed and built a MIDI flute using Arduino for physical interaction",
+      "Integrated the MIDI input with Unity to control the bard character in-game",
+      "Implemented rhythm-based gameplay mechanics that respond to the player's musical input",
+    ],
+    tech: ["Arduino", "MIDI", "Unity", "C#"],
+    links: [],
+  },
+  {
     id: "vr-roguelike-whack-a-mole",
     category: "personal",
     badge: "VR · Game Jam",
