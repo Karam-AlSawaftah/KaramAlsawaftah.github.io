@@ -49,6 +49,19 @@ body {
   background-attachment: fixed;
 }
 
+/* 3D duck background — behind everything, never catches clicks */
+#bg3d {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+#bg3d canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 /* red edge bar — signature motif from the PDF */
 body::before {
   content: "";
