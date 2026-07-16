@@ -237,6 +237,7 @@ const PROJECTS = [
     badge: "XR · Tool Development",
     title: "XR Gizmos",
     role: "Developer — Personal Project",
+    image: "public/Images/XRGizmos2.png",
     summary:
       "Unity's Gizmos are Great... until you want to use them in XR. This project is a set of reusable XR components that bring Gizmo-like functionality to VR and AR development, allowing for rapid prototyping and debugging in immersive environments.",
     highlights: [
@@ -244,7 +245,12 @@ const PROJECTS = [
       "Created a comprehensive documentation system for the tools",
     ],
     tech: ["Unity", "C#", "XR", "Tool Development"],
-    links: [],
+    links: [
+      {
+        label: "View on itch.io",
+        url: "https://karam-alsawaftah.itch.io/xrgizmos-for-unity",
+      },
+    ],
   },
   {
     id: "Project-DC",
