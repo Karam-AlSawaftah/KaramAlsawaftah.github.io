@@ -73,6 +73,7 @@
       video.src = m.src;
       video.controls = true;
       video.preload = "metadata";
+      video.playsInline = true; // iOS: play in the slide, don't hijack fullscreen
       if (m.poster) video.poster = m.poster;
       slide.appendChild(video);
       return slide;
@@ -146,6 +147,26 @@
       carousel.addEventListener("keydown", (e) => {
         if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); }
         else if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
+      });
+
+      // touch swipe — CSS touch-action: pan-y keeps vertical page scroll native
+      let swipeX = null;
+      let swipeY = null;
+      viewport.addEventListener("pointerdown", (e) => {
+        swipeX = e.clientX;
+        swipeY = e.clientY;
+      });
+      viewport.addEventListener("pointerup", (e) => {
+        if (swipeX === null) return;
+        const dx = e.clientX - swipeX;
+        const dy = e.clientY - swipeY;
+        swipeX = swipeY = null;
+        if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) {
+          go(index + (dx < 0 ? 1 : -1));
+        }
+      });
+      viewport.addEventListener("pointercancel", () => {
+        swipeX = swipeY = null;
       });
 
       carousel.append(prev, next, dots);

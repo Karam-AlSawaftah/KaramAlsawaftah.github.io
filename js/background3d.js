@@ -57,6 +57,17 @@ if (reducedMotion) {
   CONFIG.parallax = 0;
 }
 
+// Mobile / small-screen tier: phones can't afford two antialiased 2x-DPR
+// canvases with a full flock. Fewer ducks & motes, no antialias, capped
+// pixel ratio, no parallax (there's no cursor to follow on touch).
+const isMobile =
+  window.matchMedia("(pointer: coarse)").matches || Math.min(innerWidth, innerHeight) < 560;
+if (isMobile) {
+  CONFIG.duckCount = 12;
+  CONFIG.parallax = 0;
+  CONFIG.textMargin = 28; // content spans nearly the full width on phones
+}
+
 /* ---------- stage ---------- */
 
 const scene = new THREE.Scene();
@@ -79,9 +90,9 @@ function makeLayer(id, zIndex) {
   c.setAttribute("aria-hidden", "true");
   c.style.zIndex = zIndex;
   document.body.prepend(c);
-  const r = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  const r = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
   r.setClearColor(0x000000, 0); // transparent — page glows show through
-  r.setPixelRatio(Math.min(devicePixelRatio, 2));
+  r.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.25 : 2));
   r.setSize(innerWidth, innerHeight);
   r.toneMapping = THREE.ACESFilmicToneMapping;
   c.appendChild(r.domElement);
@@ -282,7 +293,7 @@ function makeDustSprite() {
 }
 
 const DUST = {
-  count: reducedMotion ? 240 : 460,
+  count: Math.min(reducedMotion ? 240 : 460, isMobile ? 160 : Infinity),
   spreadX: 44,
   spreadY: 28,
   depth: [-15, 3], // z range — behind, among and just in front of the flock
@@ -421,6 +432,12 @@ addEventListener("pointermove", (e) => {
   mouseActive = true;
 });
 addEventListener("pointerleave", () => (mouseActive = false));
+// touch has no hover: when the finger lifts, the "cursor" is gone — without
+// this a single tap would push ducks away from that spot forever
+addEventListener("pointerup", (e) => {
+  if (e.pointerType !== "mouse") mouseActive = false;
+});
+addEventListener("pointercancel", () => (mouseActive = false));
 
 // scrolling drags the flock: content moves up -> ducks get pushed up too
 let lastScrollY = scrollY;
@@ -623,11 +640,17 @@ function collideWalls(duck) {
 
 const clock = new THREE.Clock();
 
+let frameCount = 0;
+
 function tick() {
   const dt = Math.min(clock.getDelta(), 0.05); // clamp: no physics explosions after tab-switch
   const t = clock.getElapsedTime();
 
-  refreshAvoidRects(); // current viewport-relative rects (they move as you scroll)
+  // rects move as you scroll. Reading ~25 getBoundingClientRects every frame
+  // is fine on desktop but costly on phones — the avoidance force is soft
+  // enough that 6-frame-stale rects are invisible there.
+  frameCount++;
+  if (!isMobile || frameCount % 6 === 1) refreshAvoidRects();
 
   for (const duck of ducks) {
     applyForces(duck, t, dt);

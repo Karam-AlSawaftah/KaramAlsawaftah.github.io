@@ -40,14 +40,25 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* warm ambient glow + a soft vignette so the dark canvas reads as deep, not flat */
+/* stop any stray horizontal overflow from causing sideways scroll on phones
+   (clip, not hidden — no new scroll container, sticky header keeps working) */
 body {
+  overflow-x: clip;
+}
+
+/* warm ambient glow + a soft vignette so the dark canvas reads as deep, not
+   flat. Lives on a fixed layer instead of body background-attachment: fixed,
+   which iOS Safari doesn't support. */
+#bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -2; /* behind the back duck canvas (-1) */
+  pointer-events: none;
   background-image:
     radial-gradient(135% 125% at 50% 42%, transparent 56%, rgba(0, 0, 0, 0.55) 100%),
     radial-gradient(1000px 600px at 85% -10%, rgba(247, 213, 102, 0.14), transparent 60%),
     radial-gradient(800px 600px at -15% 35%, rgba(216, 68, 51, 0.16), transparent 60%),
     radial-gradient(900px 700px at 50% 115%, rgba(247, 213, 102, 0.1), transparent 55%);
-  background-attachment: fixed;
 }
 
 /* 3D duck background — two stacked canvases (z-index set in JS: back behind
@@ -495,7 +506,9 @@ section.block {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  /* min(320px, 100%) lets tracks shrink below 320px on narrow phones
+     instead of overflowing the viewport sideways */
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: 26px;
 }
 
@@ -934,6 +947,7 @@ body.modal-open {
   position: relative;
   width: min(720px, 100%);
   max-height: 86vh;
+  max-height: 86dvh; /* mobile URL bars — falls back to the vh line above */
   display: flex;
   flex-direction: column;
   /* frosted panel, matching the rest of the site */
@@ -979,6 +993,7 @@ body.modal-open {
 
 .modal-scroll {
   overflow-y: auto;
+  overscroll-behavior: contain; /* modal scroll shouldn't chain to the page */
   padding: 34px 34px 30px;
 }
 
@@ -1063,6 +1078,7 @@ body.modal-open {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #000;
+  touch-action: pan-y; /* vertical scroll passes through; horizontal swipes are ours */
 }
 .carousel-track {
   display: flex;
@@ -1282,6 +1298,40 @@ body.modal-open {
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* touch devices: comfortable tap targets */
+@media (pointer: coarse) {
+  .modal-close {
+    width: 42px;
+    height: 42px;
+  }
+  .carousel-arrow {
+    width: 44px;
+    height: 44px;
+  }
+  .carousel-dot {
+    width: 12px;
+    height: 12px;
+  }
+  .secret-btn {
+    padding: 10px 8px;
+  }
+}
+
+/* short screens (landscape phones): compact the tall paddings */
+@media (max-height: 520px) {
+  .hero {
+    padding: 48px 0 44px;
+  }
+  section.block {
+    padding: 48px 0;
+  }
+  .modal {
+    max-height: 92vh;
+    max-height: 92dvh;
+  }
+}
+
 @media (max-width: 960px) {
   .header-tag {
     display: none;
@@ -1343,5 +1393,21 @@ body.modal-open {
   }
   .contact-card {
     padding: 30px;
+  }
+  .hero-inner {
+    padding: 24px 20px;
+  }
+  /* justified text makes ugly rivers in narrow columns */
+  .about-text,
+  .xp-desc,
+  .modal-summary {
+    text-align: left;
+  }
+  .contact-info {
+    overflow-wrap: anywhere; /* long email / address strings */
+  }
+  /* clear the fixed secret button in the corner */
+  .site-footer {
+    padding-bottom: 48px;
   }
 }
