@@ -231,6 +231,37 @@ const PROJECTS = [
     tech: ["Unity", "C#", "VR", "Rapid Prototyping"],
     links: [],
   },
+  {
+    id: "XR-Gizmos",
+    category: "personal",
+    badge: "XR · Tool Development",
+    title: "XR Gizmos",
+    role: "Developer — Personal Project",
+    summary:
+      "Unity's Gizmos are Great... until you want to use them in XR. This project is a set of reusable XR components that bring Gizmo-like functionality to VR and AR development, allowing for rapid prototyping and debugging in immersive environments.",
+    highlights: [
+      "Developed a set of reusable XR components for rapid prototyping",
+      "Created a comprehensive documentation system for the tools",
+    ],
+    tech: ["Unity", "C#", "XR", "Tool Development"],
+    links: [],
+  },
+  {
+    id: "Project-DC",
+    category: "personal",
+    badge: "VR · Game Development",
+    title: "Project DC",
+    role: "Developer — Personal Project",
+    summary:
+      "Project-DC(WIP) is a chaotic, story-driven arcade action game about a group of broke university students forced into intergalactic delivery work to avoid a predatory debt trap. this project is still in development.",
+    highlights: [
+      "Developed the core gameplay mechanics for the VR game",
+      "Developed a Multi Physics system to handle complex interactions and collisions between a moving ship which holds the players and the environment",
+      "Synchronized multiplayer interactions and physics across networked players, ensuring a consistent and immersive experience for all participants",
+    ],
+    tech: ["Unity", "C#", "VR", "Game Development","Multiplayer"],
+    links: [],
+  }
 ];
 
 /* ------------------------------------------------------------
@@ -269,11 +300,11 @@ const EDUCATION = [
 const SKILLS = [
   {
     group: "Development",
-    items: ["Unity 3D development", "C# programming", "WebXR"],
+    items: ["Unity 3D development", "C# programming", "WebXR", "JavaScript", "A-Frame", "Networking & Multiplayer"],
   },
   {
     group: "XR Frameworks",
-    items: ["ARKit", "ARCore", "OpenXR"],
+    items: ["ARKit", "ARCore", "OpenXR", "Mixed Reality Toolkit (MRTK)", "XR Interaction Toolkit"],
   },
   {
     group: "3D & Real-Time",
